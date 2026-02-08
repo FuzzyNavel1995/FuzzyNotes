@@ -1,0 +1,34 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ] # mainブランチにpushしたときに自動実行
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # ページの更新権限
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x # 9.0を使っているなら 9.0.x に変更
+
+      - name: Publish
+        # ここで --base-href を指定するのがポイント！
+        run: dotnet publish -c Release -o release --base-href "/FuzzyNotes/"
+
+      - name: Add .nojekyll
+        run: touch release/wwwroot/.nojekyll
+
+      - name: Add 404.html for SPA
+        run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: release/wwwroot
+          branch: gh-pages # 公開専用のブランチを勝手に作ってくれます

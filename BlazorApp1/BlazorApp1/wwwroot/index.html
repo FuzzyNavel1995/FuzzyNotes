@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BlazorApp1</title>
     <base href="/FuzzyNotes/" />
+    <link rel="preload" id="webassembly" />
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
@@ -13,6 +14,7 @@
     <link href="manifest.webmanifest" rel="manifest" />
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+    <script type="importmap"></script>
 </head>
 
 <body>
@@ -29,29 +31,8 @@
         <a href="." class="reload">Reload</a>
         <span class="dismiss">🗙</span>
     </div>
-
-    <script src="_framework/blazor.webassembly.66stpp682q.js" autostart="false"></script>
-
-    <script>
-        window.onload = function () {
-            if (window.Blazor) {
-                Blazor.start({
-                    loadBootResource: function (type, name, defaultUri, integrity) {
-                        // 1. ハッシュチェック（Integrity）を全世界共通で無視
-                        console.log(`Loading resource: ${name} from ${defaultUri}`);
-
-                        // 2. GitHub Pages の 404 回避策
-                        // dotnet.js などの名前でリクエストが来たら、
-                        // 既にハッシュが正しく付与されている defaultUri を強制的に使う
-                        return defaultUri;
-                    }
-                });
-            }
-        };
-
-        // Service Worker の登録（キャッシュが邪魔しないよう updateViaCache: 'none'）
-        navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });
-    </script>
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
 </body>
 
 </html>
