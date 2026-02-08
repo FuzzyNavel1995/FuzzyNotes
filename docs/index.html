@@ -30,18 +30,22 @@
         <span class="dismiss">🗙</span>
     </div>
 
-    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script src="_framework/blazor.webassembly.66stpp682q.js" autostart="false"></script>
 
     <script>
-        // 2. 整合性チェックをバイパスして起動する設定
-        Blazor.start({
-            loadBootResource: function (type, name, defaultUri, integrity) {
-                // integrity（ハッシュ値）を無視してURLのみを返す
-                return defaultUri;
+        // Blazorオブジェクトが存在するか確認してから起動
+        window.onload = function () {
+            if (window.Blazor) {
+                Blazor.start({
+                    loadBootResource: function (type, name, defaultUri, integrity) {
+                        // 整合性チェックを無視
+                        return defaultUri;
+                    }
+                });
             }
-        });
+        };
 
-        // 3. Service Worker の登録
+        // Service Worker の登録
         navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });
     </script>
 </body>
