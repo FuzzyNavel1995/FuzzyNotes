@@ -2,23 +2,23 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # mainブランチにpushしたときに自動実行
+    branches: [ main ] # ここがリポジトリのブランチ名と合っているか確認！
+  workflow_dispatch:   # これを入れるとActions画面から手動実行ボタンが出ます
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # ページの更新権限
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x # 9.0を使っているなら 9.0.x に変更
+          dotnet-version: '10.0.x' # 引用符で囲むのが安全です
 
       - name: Publish
-        # ここで --base-href を指定するのがポイント！
         run: dotnet publish -c Release -o release --base-href "/FuzzyNotes/"
 
       - name: Add .nojekyll
@@ -31,4 +31,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: release/wwwroot
-          branch: gh-pages # 公開専用のブランチを勝手に作ってくれます
+          branch: gh-pages
