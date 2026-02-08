@@ -33,20 +33,17 @@
     <script src="_framework/blazor.webassembly.66stpp682q.js" autostart="false"></script>
 
     <script>
-        // Blazorオブジェクトが存在するか確認してから起動
         window.onload = function () {
             if (window.Blazor) {
                 Blazor.start({
                     loadBootResource: function (type, name, defaultUri, integrity) {
-                        // 整合性チェックを無視
+                        // 全ての boot リソース（dotnet.js, dll, wasm 等）のハッシュチェックを無効化
+                        console.log(`Loading resource: ${name}`);
                         return defaultUri;
                     }
                 });
             }
         };
-
-        // Service Worker の登録
-        navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });
     </script>
 </body>
 
