@@ -37,13 +37,20 @@
             if (window.Blazor) {
                 Blazor.start({
                     loadBootResource: function (type, name, defaultUri, integrity) {
-                        // 全ての boot リソース（dotnet.js, dll, wasm 等）のハッシュチェックを無効化
-                        console.log(`Loading resource: ${name}`);
+                        // 1. ハッシュチェック（Integrity）を全世界共通で無視
+                        console.log(`Loading resource: ${name} from ${defaultUri}`);
+
+                        // 2. GitHub Pages の 404 回避策
+                        // dotnet.js などの名前でリクエストが来たら、
+                        // 既にハッシュが正しく付与されている defaultUri を強制的に使う
                         return defaultUri;
                     }
                 });
             }
         };
+
+        // Service Worker の登録（キャッシュが邪魔しないよう updateViaCache: 'none'）
+        navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });
     </script>
 </body>
 
