@@ -19,7 +19,9 @@ jobs:
           dotnet-version: '10.0.x' # 引用符で囲むのが安全です
 
       - name: Publish
-        run: dotnet publish -c Release -o release -p:ServiceWorkerAssetsManifest=service-worker-assets.js
+        # working-directory でプロジェクトがあるフォルダを指定します
+        working-directory: BlazorApp1
+        run: dotnet publish -c Release -o ../release -p:BaseHref="/FuzzyNotes/"
 
       - name: Add .nojekyll
         run: touch release/wwwroot/.nojekyll
